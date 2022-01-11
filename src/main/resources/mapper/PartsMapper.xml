@@ -3,11 +3,11 @@
 <mapper namespace="com.hmf.server.mapper.PartsMapper">
     <resultMap id="BaseMapper" type="com.hmf.server.entity.Parts">
         <id property="id" column="id"/>
-        <result property="partsEnterPrice" column="parts_enter_price"/>
         <result property="partsChannel" column="parts_channel"/>
         <result property="partsCount" column="parts_count"/>
         <result property="partsName" column="parts_name"/>
         <result property="partsPrice" column="parts_price"/>
+        <result property="partsTag" column="parts_tag"/>
     </resultMap>
 
     <select id="getPartsInfoByName" resultMap="BaseMapper" parameterType="String">

@@ -41,19 +41,13 @@ public class Parts implements Serializable {
     @TableField("parts_count")
     private Long partsCount;
 
-    @ApiModelProperty("零件进货价")
-    @TableField("parts_enter_price")
-    private BigDecimal partsEnterPrice;
-
     @ApiModelProperty("零件售价")
     @TableField("parts_price")
     private BigDecimal partsPrice;
 
-    @ApiModelProperty("创建时间")
-    private LocalDateTime createtime;
-
-    @ApiModelProperty("修改时间")
-    private LocalDateTime updatetime;
+    @ApiModelProperty("零件分类")
+    @TableField("parts_tag")
+    private BigDecimal partsTag;
 
 
 }
