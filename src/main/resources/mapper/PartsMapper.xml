@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hmf.server.mapper.PartsMapper">
+    <resultMap id="BaseMapper" type="com.hmf.server.entity.Parts">
+        <id property="id" column="id"/>
+        <result property="partsEnterPrice" column="parts_enter_price"/>
+        <result property="partsChannel" column="parts_channel"/>
+        <result property="partsCount" column="parts_count"/>
+        <result property="partsName" column="parts_name"/>
+        <result property="partsPrice" column="parts_price"/>
+    </resultMap>
+
+    <select id="getPartsInfoByName" resultMap="BaseMapper" parameterType="String">
+        select * from t_parts where parts_name like concat('%',#{name},'%')
+    </select>
+</mapper>

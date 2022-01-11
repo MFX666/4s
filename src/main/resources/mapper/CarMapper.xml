@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hmf.server.mapper.CarMapper">
+    <resultMap id="BaseMapper" type="com.hmf.server.entity.Car">
+        <id property="id" column="id"/>
+        <result property="carChannel" column="car_channel"/>
+        <result property="carCount" column="car_count"/>
+        <result property="carEnterPrice" column="car_enter_price"/>
+        <result property="carName" column="car_name"/>
+        <result property="carParameters" column="car_parameters"/>
+        <result property="carPicture" column="car_picture"/>
+    </resultMap>
+    <select id="getCarInfoByName" resultMap="BaseMapper" parameterType="String">
+        select * from t_car where car_name like concat('%',#{name},'%')
+    </select>
+</mapper>
