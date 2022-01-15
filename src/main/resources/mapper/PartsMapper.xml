@@ -8,9 +8,13 @@
         <result property="partsName" column="parts_name"/>
         <result property="partsPrice" column="parts_price"/>
         <result property="partsTag" column="parts_tag"/>
+        <result property="partsNumber" column="parts_number"/>
     </resultMap>
 
     <select id="getPartsInfoByName" resultMap="BaseMapper" parameterType="String">
         select * from t_parts where parts_name like concat('%',#{name},'%')
+    </select>
+    <select id="getPartsInfoByTag" resultMap="BaseMapper" parameterType="String">
+        select * from t_parts where parts_tag =#{tag}
     </select>
 </mapper>

@@ -9,9 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author mfx
- * @since 2022-01-08
+ * @since 2022-01-15
  */
 public interface CompanyMapper extends BaseMapper<Company> {
 
-    Company getCompanyInfoById(Integer id);
 }

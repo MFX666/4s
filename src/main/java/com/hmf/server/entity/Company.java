@@ -4,13 +4,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * <p>
@@ -18,12 +15,11 @@ import lombok.ToString;
  * </p>
  *
  * @author mfx
- * @since 2022-01-08
+ * @since 2022-01-15
  */
 @Getter
 @Setter
 @TableName("t_company")
-@ToString
 @ApiModel(value = "Company对象", description = "")
 public class Company implements Serializable {
 
@@ -45,11 +41,18 @@ public class Company implements Serializable {
     private String companyNote;
 
     @ApiModelProperty("创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
     private LocalDateTime createtime;
 
     @ApiModelProperty("更新时间")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
     private LocalDateTime updatetime;
+
+    @ApiModelProperty("品牌id")
+    @TableField("brand_id")
+    private Long brandId;
+
+    @ApiModelProperty("咨询热线")
+    @TableField("company_telephone")
+    private String companyTelephone;
+
 
 }

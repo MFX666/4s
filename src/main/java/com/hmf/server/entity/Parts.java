@@ -50,4 +50,7 @@ public class Parts implements Serializable {
     private BigDecimal partsTag;
 
 
+    @ApiModelProperty("零件编号")
+    @TableField("parts_number")
+    private BigDecimal partsNumber;
 }

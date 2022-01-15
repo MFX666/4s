@@ -18,4 +18,5 @@ public interface PartsMapper extends BaseMapper<Parts> {
     List<Parts> getPartsInfoByName(String name);
 
 
+    List<Parts> getPartsInfoByTag();
 }

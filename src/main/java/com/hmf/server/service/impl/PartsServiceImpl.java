@@ -27,4 +27,10 @@ public class PartsServiceImpl extends ServiceImpl<PartsMapper, Parts> implements
     public List<Parts> getPartsInfoByName(String name) {
         return partsMapper.getPartsInfoByName(name);
     }
+
+    @Override
+    public List<Parts> getPartsInfoByTag(String tag) {
+
+        return partsMapper.getPartsInfoByTag();
+    }
 }

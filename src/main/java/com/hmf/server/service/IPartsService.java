@@ -16,4 +16,6 @@ import java.util.List;
 public interface IPartsService extends IService<Parts> {
 
     List<Parts> getPartsInfoByName(String name);
+
+    List<Parts> getPartsInfoByTag(String tag);
 }

@@ -6,11 +6,8 @@ import com.hmf.server.model.ResponseBean;
 import com.hmf.server.service.IPartsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.hmf.server.controller.BaseController;
 
 import java.util.List;
@@ -58,4 +55,42 @@ public class PartsController extends BaseController {
             }
         }
     }
+
+    /**
+     * @param parts
+     * @return
+     * 添加零件
+     */
+    @PostMapping("/addParts")
+    public ResponseBean addParts(@RequestBody List<Parts> parts){
+        if(parts==null){
+            return ResponseBean.error("零件为空，不给予添加");
+        }else{
+            if(iPartsService.saveBatch(parts)){
+                return ResponseBean.success("添加成功！");
+            }else {
+                return ResponseBean.error("添加失败");
+            }
+        }
+    }
+
+    /**
+     * @param tag
+     * @return
+     * 通过标签获取零件
+     */
+    @GetMapping("/getPartsInfoByTag/{tag}")
+    public ResponseBean gePartsInfoByTag(@PathVariable String tag){
+        if(tag==null){
+            return ResponseBean.error("标签为空，查询不了");
+        }else {
+            List<Parts> parts = iPartsService.getPartsInfoByTag(tag);
+            if(parts!=null){
+                return ResponseBean.success(parts);
+            }else {
+                return ResponseBean.error("未查询到相关零件");
+            }
+        }
+    }
+
 }
