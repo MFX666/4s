@@ -1,6 +1,6 @@
 package com.hmf.server.mapper;
 
-import com.hmf.server.entity.Parts;
+import com.hmf.server.entity.PartsStorage;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author mfx
  * @since 2022-01-16
  */
-public interface PartsMapper extends BaseMapper<Parts> {
+public interface PartsStorageMapper extends BaseMapper<PartsStorage> {
 
 }

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import lombok.Setter;
  * </p>
  *
  * @author mfx
- * @since 2022-01-08
+ * @since 2022-01-16
  */
 @Getter
 @Setter
@@ -33,24 +32,9 @@ public class Parts implements Serializable {
     @TableField("parts_name")
     private String partsName;
 
-    @ApiModelProperty("零件渠道")
-    @TableField("parts_channel")
-    private String partsChannel;
-
-    @ApiModelProperty("零件数量")
-    @TableField("parts_count")
-    private Long partsCount;
-
-    @ApiModelProperty("零件售价")
-    @TableField("parts_price")
-    private BigDecimal partsPrice;
-
     @ApiModelProperty("零件分类")
     @TableField("parts_tag")
-    private BigDecimal partsTag;
+    private String partsTag;
 
 
-    @ApiModelProperty("零件编号")
-    @TableField("parts_number")
-    private BigDecimal partsNumber;
 }

@@ -1,6 +1,6 @@
 package com.hmf.server.service;
 
-import com.hmf.server.entity.Parts;
+import com.hmf.server.entity.PartsFactory;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author mfx
  * @since 2022-01-16
  */
-public interface IPartsService extends IService<Parts> {
+public interface IPartsFactoryService extends IService<PartsFactory> {
 
 }

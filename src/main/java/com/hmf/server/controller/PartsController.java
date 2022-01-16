@@ -1,96 +1,111 @@
 package com.hmf.server.controller;
 
 
+import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hmf.server.entity.Parts;
 import com.hmf.server.model.ResponseBean;
 import com.hmf.server.service.IPartsService;
+import com.hmf.server.utils.filter.RepeatFilterService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import com.hmf.server.controller.BaseController;
-
+import javax.servlet.http.Part;
 import java.util.List;
 
 /**
  * <p>
- * 前端控制器
+ *  前端控制器
  * </p>
  *
  * @author mfx
- * @since 2022-01-08
+ * @since 2022-01-16
  */
 @RestController
+@Api("零件常量管理")
 @RequestMapping("/parts")
 public class PartsController extends BaseController {
     @Autowired
     private IPartsService iPartsService;
-
-    /**
-     * @return
-     * 查询所有零件
-     * 后续添加分页功能
-     */
-    @GetMapping("/getAllPartsInfo")
-    public ResponseBean getAllPartsInfo(){
+    @Autowired
+    private RepeatFilterService partsFilter;
+    @ApiOperation("获取所有零件常量")
+    @GetMapping("/getAllParts")
+    public ResponseBean getAllParts (){
         return ResponseBean.success(iPartsService.list());
     }
-
-
-    /**
-     * @param name
-     * @return
-     * 零件名称查询零件---使用模糊查询
-     */
-    @GetMapping("/getPartsInfoByName/{name}")
-    public ResponseBean getPartsInfoByName (@PathVariable String name){
-        if(name==null){
-            return  ResponseBean.error("名称为空不能查询");
-        }else {
-            List<Parts> parts = iPartsService.getPartsInfoByName(name);
-            if(parts!=null){
-                return ResponseBean.success(parts);
-            }else {
-                return ResponseBean.error("未查询到相关零件");
-            }
-        }
-    }
-
-    /**
-     * @param parts
-     * @return
-     * 添加零件
-     */
-    @PostMapping("/addParts")
-    public ResponseBean addParts(@RequestBody List<Parts> parts){
+    @ApiOperation("添加零件常量")
+    @PostMapping("addParts")
+    public ResponseBean addParts(@RequestBody Parts parts){
         if(parts==null){
-            return ResponseBean.error("零件为空，不给予添加");
-        }else{
-            if(iPartsService.saveBatch(parts)){
-                return ResponseBean.success("添加成功！");
-            }else {
-                return ResponseBean.error("添加失败");
-            }
-        }
-    }
-
-    /**
-     * @param tag
-     * @return
-     * 通过标签获取零件
-     */
-    @GetMapping("/getPartsInfoByTag/{tag}")
-    public ResponseBean gePartsInfoByTag(@PathVariable String tag){
-        if(tag==null){
-            return ResponseBean.error("标签为空，查询不了");
+            return ResponseBean.error("参数为空");
         }else {
-            List<Parts> parts = iPartsService.getPartsInfoByTag(tag);
-            if(parts!=null){
-                return ResponseBean.success(parts);
+            if(!partsFilter.checkDBParts(parts)){
+                if(iPartsService.save(parts)){
+                    return ResponseBean.success("添加成功");
+                }else {
+                    return ResponseBean.error("添加失败");
+                }
             }else {
-                return ResponseBean.error("未查询到相关零件");
+                return ResponseBean.error("该零件已存在，请勿重复添加");
             }
         }
     }
-
+    @ApiOperation("通过标签查看零件常量")
+    @GetMapping("/getPartsByTag/{tag}")
+    public ResponseBean getPartsByTag(@PathVariable String tag){
+        if(tag==null){
+            return ResponseBean.error("参数为空");
+        }else {
+            QueryWrapper<Parts> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("parts_tag",tag);
+            List<Parts> list = iPartsService.list(queryWrapper);
+            return ResponseBean.success(list);
+        }
+    }
+    @ApiOperation("更新零件常量")
+    @PostMapping("/updateParts")
+    public ResponseBean updateParts(@RequestBody Parts parts){
+        if(parts==null){
+            return ResponseBean.error("参数为空");
+        }else {
+            if(!partsFilter.checkDBParts(parts)){
+                if(iPartsService.updateById(parts)){
+                    return ResponseBean.success("修改成功");
+                }else {
+                    return ResponseBean.error("修改失败");
+                }
+            }else{
+                return ResponseBean.error("该零件在数据库中已存在");
+            }
+        }
+    }
+    @ApiOperation("删除零件常量")
+    @DeleteMapping("deleteParts/{id}")
+    public ResponseBean deleteParts(@PathVariable Integer id){
+        if(id==null){
+            return ResponseBean.error("参数为空");
+        }else {
+            if (iPartsService.removeById(id)){
+                return ResponseBean.success("删除成功");
+            }else {
+                return ResponseBean.error("删除失败");
+            }
+        }
+    }
+    @ApiOperation("通过名字查找零件常量")
+    @GetMapping("/getPartsByName/{name}")
+    public ResponseBean getPartsByName (@PathVariable String name){
+        if(name==null) {
+            return  ResponseBean.error("参数为空");
+        }else {
+            QueryWrapper<Parts> queryWrapper = new QueryWrapper<>();
+            queryWrapper.like("parts_name",name);
+            List<Parts> list = iPartsService.list(queryWrapper);
+            return ResponseBean.success(list);
+        }
+    }
 }
