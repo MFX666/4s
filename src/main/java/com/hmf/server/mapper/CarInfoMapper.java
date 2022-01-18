@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2022-01-15
  */
 public interface CarInfoMapper extends BaseMapper<CarInfo> {
-
+    int saveCarInfo(CarInfo carInfo);
 }

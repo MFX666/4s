@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hmf.server.mapper.PartsMapper">
 
+    <insert id="insertParts" parameterType="com.hmf.server.entity.Parts">
+        insert into t_parts (parts_name,parts_tag)
+        select #{partsName},#{partsTag} from dual
+        where not exists (select id from t_parts where parts_name =#{partsName})
+    </insert>
+    <update id="updateParts" parameterType="com.hmf.server.entity.Parts">
+        update t_parts set parts_name =#{partsName},parts_tag=#{partsTag}
+        where not exists (select id from t_parts where parts_name =#{partsName})
+        and id = #{id}
+    </update>
 </mapper>

@@ -37,19 +37,12 @@ public class BrandController extends BaseController {
         if(brand==null){
             return ResponseBean.error("参数为空！");
         }else{
-            //获取数据库中的品牌信息
-            QueryWrapper <Brand> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("company_name",brand.getBrandName());
-            Brand DBBrand = iBrandService.getOne(queryWrapper);
-            if(brand.getBrandName().equals(DBBrand.getBrandName())){
-                return ResponseBean.error("该品牌已存在，请勿重复添加");
-            }else{
-                if(iBrandService.save(brand)){
-                    return ResponseBean.success("添加成功");
-                }
+            if(iBrandService.insertBrandInfo(brand)>0){
+                return ResponseBean.success("添加成功");
+            }else {
+                return ResponseBean.error("该品牌已存在请勿重复添加");
             }
         }
-        return ResponseBean.error("添加失败");
     }
 
 }

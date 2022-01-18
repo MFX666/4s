@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPartsService extends IService<Parts> {
 
+    int insertParts(Parts parts);
+
+    int updateParts(Parts parts);
 }

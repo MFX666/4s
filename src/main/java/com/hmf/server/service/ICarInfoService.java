@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ICarInfoService extends IService<CarInfo> {
 
+    int saveCarInfo(CarInfo carInfo);
 }

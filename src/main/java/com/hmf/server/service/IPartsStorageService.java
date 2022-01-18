@@ -2,6 +2,9 @@ package com.hmf.server.service;
 
 import com.hmf.server.entity.PartsStorage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hmf.server.entity.VO.PartsStorageVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPartsStorageService extends IService<PartsStorage> {
 
+    List<PartsStorageVO> getPartsStorageByPartsName (String partsName);
+
+    List<PartsStorageVO> getPartsStorageByCompanyId(Long companyId);
 }

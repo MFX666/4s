@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface BrandMapper extends BaseMapper<Brand> {
 
+    int insertBrandInfo(Brand brand);
 }

@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface PartsFactoryMapper extends BaseMapper<PartsFactory> {
 
+    int insertPartsFactory(PartsFactory partsFactory);
+
+    int update(PartsFactory partsFactory);
 }

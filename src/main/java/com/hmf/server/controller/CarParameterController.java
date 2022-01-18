@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hmf.server.entity.CarParameter;
 import com.hmf.server.model.ResponseBean;
 import com.hmf.server.service.ICarParameterService;
-import com.hmf.server.utils.filter.RepeatFilterService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CarParameterController extends BaseController {
     @Autowired
     private ICarParameterService iCarParameterService;
-    @Autowired
-    private RepeatFilterService parameterFilter;
     @ApiModelProperty("获取所有的汽车参数信息")
     @GetMapping("/getAllParameters")
     public ResponseBean getAllParameters(){

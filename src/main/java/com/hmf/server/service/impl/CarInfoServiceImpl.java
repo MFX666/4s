@@ -4,6 +4,7 @@ import com.hmf.server.entity.CarInfo;
 import com.hmf.server.mapper.CarInfoMapper;
 import com.hmf.server.service.ICarInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,5 +17,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CarInfoServiceImpl extends ServiceImpl<CarInfoMapper, CarInfo> implements ICarInfoService {
+    @Autowired
+    private CarInfoMapper carInfoMapper;
 
+    @Override
+    public int saveCarInfo(CarInfo carInfo) {
+          return carInfoMapper.saveCarInfo(carInfo);
+    }
 }

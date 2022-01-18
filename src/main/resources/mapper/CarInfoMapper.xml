@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hmf.server.mapper.CarInfoMapper">
 
+    <insert id="saveCarInfo" parameterType="com.hmf.server.entity.CarInfo">
+        insert into t_car_info (car_name,car_picture_url,car_price,car_tag,brand_id,parameters_info)
+        select #{carName},#{carPictureUrl},#{carPrice},#{carTag},#{brandId},#{parametersInfo} from dual
+        where not exists (SELECT car_name FROM t_car_info WHERE car_name=#{carName} AND parameters_info = #{parametersInfo})
+    </insert>
 </mapper>

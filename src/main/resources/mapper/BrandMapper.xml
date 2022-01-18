@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hmf.server.mapper.BrandMapper">
 
+    <insert id="insertBrandInfo" parameterType="com.hmf.server.entity.Brand">
+        insert into t_brand (brand_name,brand_logo_url)
+        select #{brandName},#{brandLogoUrl} from dual
+        where not exists (select id from t_brand where brand_name = #{brandName});
+    </insert>
 </mapper>
