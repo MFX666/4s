@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseBean {
+public class ResponseBean  {
     private long code;
     private String message;
     private Object obj;

@@ -1,5 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hmf.server.mapper.CompanyMapper">
-
+    <resultMap id="CompanyVoMap" type="com.hmf.server.entity.VO.CompanyVo">
+        <id property="id" column="id"/>
+        <result property="companyAddress" column="company_address"/>
+        <result property="companyTelephone" column="company_telephone"/>
+        <result property="companyName" column="company_name"/>
+        <result property="companyNote" column="company_note"/>
+        <result property="createtime" column="createtime"/>
+        <result property="updatetime" column="updatetime"/>
+        <association property="brand" javaType="com.hmf.server.entity.Brand">
+            <id property="id" column="id"/>
+            <result property="brandName" column="brand_name"/>
+            <result property="brandLogoUrl" column="brand_logo_url"/>
+        </association>
+    </resultMap>
+    <insert id="insertCompanyInfo" parameterType="com.hmf.server.entity.Company">
+        insert into t_company
+        (company_name,company_address,company_telephone,brand_id,createtime,updatetime,company_note)
+        select
+        #{companyName},#{companyAddress},#{companyTelephone},#{brandId},#{createtime},#{updatetime},#{companyNote}
+        where not exists(select id from t_company where company_name =#{companyName} and
+        company_address=#{companyAddress})
+    </insert>
+    <update id="updateCompanyInfo" parameterType="com.hmf.server.entity.Company">
+        update t_company set
+        company_name=#{companyName},
+        company_address=#{companyAddress},
+        company_telephone=#{companyTelephone},
+        company_note=#{companyNote},
+        brand_id =#{brandId},
+        updatetime=#{updatetime},
+        where not exists(select id from t_company where company_name =#{companyName} and
+        company_address=#{companyAddress})
+        and id =#{id}
+    </update>
+    <select id="getAllCompanyInfo" resultMap="CompanyVoMap">
+        select
+        c.company_name,
+        c.company_address,
+        c.company_telephone,
+        b.brand_name,
+        b.brand_logo_url,
+        c.createtime,
+        c.company_note
+        from t_company c
+        left join t_brand b on c.brand_id = b.id
+    </select>
+    <select id="unionSearchCompanyInfo" resultType="com.hmf.server.entity.VO.CompanyVo">
+        select
+        c.company_name,
+        c.company_address,
+        c.company_telephone,
+        b.brand_name,
+        b.brand_logo_url,
+        c.createtime,
+        c.company_note
+        from t_company c
+        left join t_brand b on c.brand_id = b.id
+        <if test="companyId != null">
+            and company_id=#{companyId}
+        </if>
+        <if test="companyName != null">
+            and company_name like#{companyName}
+        </if>
+        <if test="brandId != null">
+            and brand_id =#{brandId}
+        </if>
+        <if test="brandName != null">
+            and brand_name like #{brandName}
+        </if>
+        <if test="companyAddress != null">
+            and company_address like #{companyAddress}
+        </if>
+    </select>
 </mapper>

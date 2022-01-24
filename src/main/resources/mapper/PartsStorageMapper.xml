@@ -5,11 +5,11 @@
         <id property="id" column="id"/>
         <result property="partsNumber" column="parts_number"/>
         <result property="createtime" column="createtime"/>
-        <result property="pratsPrice" column="parts_price"/>
+        <result property="partsPrice" column="parts_price"/>
         <association property="parts" javaType="com.hmf.server.entity.Parts">
             <id property="id" column="id"/>
-            <result property="partsTag" column="parts_tag"/>
             <result property="partsName" column="parts_name"/>
+            <result property="partsTag" column="parts_tag"/>
         </association>
         <association property="company" javaType="com.hmf.server.entity.Company">
             <id property="id" column="id"/>
@@ -24,26 +24,43 @@
             <result property="factoryTelephone" column="factory_telephone"/>
         </association>
     </resultMap>
-    <select id="getPartsStorageByPartsName" resultMap="PartsStorageVOMap" parameterType="String">
+    <insert id="insertPartsStorage">
+        insert into t_parts_storage (factory_id,parts_number,parts_price,company_id,createtime,parts_id)
+        select #{factoryId},#{partsNumber},#{partsPrice},#{companyId},#{createtime},#{parts_id} from dual
+        where no exists (select id from t_parts_storage where company_id={companyId} and parts_number=#{partsNumber})
+    </insert>
+    <update id="updateEnableById" parameterType="java.util.ArrayList">
+        update t_parts_storage set is_enable = 0
+        where id in (
+        <foreach collection="array" item="id" index="index" separator=",">
+            #{id}
+        </foreach>
+        ) and is_enable != 0
+    </update>
+    <!--    <select id="getAllEnablePartsStorageInfo" resultMap="PartsStorageVOMap">-->
+    <!--        select-->
+    <!--        p.parts_name,-->
+    <!--        p.parts_tag,-->
+    <!--        pt.parts_price,-->
+    <!--        c.company_name,-->
+    <!--        c.company_address,-->
+    <!--        c.company_telephone-->
+    <!--        from t_parts_storage pt-->
+    <!--        left join t_parts p on pt.parts_id = p.id-->
+    <!--        left join t_company c on pt.company_id = c.id-->
+    <!--        and pt.is_enable = 1;-->
+    <!--    </select>-->
+    <select id="searchParts" resultMap="PartsStorageVOMap" parameterType="com.hmf.server.model.PartsStorageSearchBody">
         select
+        pt.id,
+        pt.parts_number,
         p.parts_name,
-        pt.parts_price,
         p.parts_tag,
+        pt.parts_price,
+        pt.createtime,
         c.company_name,
         c.company_address,
-        c.company_telephone
-        from t_parts_storage pt
-        left join t_parts p on pt.parts_id = p.id
-        left join t_company c on pt.company_id = c.id
-        and p.parts_name like contact('%',#{partsName},'%');
-        and pt.is_enable = 1;
-    </select>
-    <select id="getPartsStorageByCompanyId" resultMap="PartsStorageVOMap" parameterType="Long">
-        select
-        p.parts_number
-        p.parts_name,
-        pt.parts_price,
-        p.parts_tag,
+        c.company_telephone,
         pf.factory_name,
         pf.factory_address,
         pf.factory_telephone
@@ -51,7 +68,21 @@
         left join t_parts p on pt.parts_id = p.id
         left join t_company c on pt.company_id = c.id
         left join t_parts_factory pf on pt.factory_id = pf.id
-        and pt.company_id = #{companyId}
-        and pt.is_enable = 1;
+        <if test="companyId != null">
+            and pt.company_id = #{companyId}
+        </if>
+        <if test="isEnable !=null">
+            and pt.is_enable = #{isEnable}
+        </if>
+        <if test="partsName !=null">
+            and p.parts_name like concat ('%',#{partsName},'%')
+        </if>
+        <if test="partsTag !=null">
+            and p.parts_tag = #{partsTag}
+        </if>
+        <if test="companyName !=null">
+            and c.company_name like #{companyName}
+        </if>
     </select>
+
 </mapper>

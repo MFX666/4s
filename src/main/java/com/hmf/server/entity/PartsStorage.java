@@ -41,8 +41,8 @@ public class PartsStorage implements Serializable {
     private String partsNumber;
 
     @ApiModelProperty("零件价格")
-    @TableField("prats_price")
-    private BigDecimal pratsPrice;
+    @TableField("parts_price")
+    private BigDecimal partsPrice;
 
     @ApiModelProperty("是否可以使用--1--可以--0--不可以")
     @TableField("is_enable")

@@ -3,8 +3,10 @@ package com.hmf.server.mapper;
 import com.hmf.server.entity.PartsStorage;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hmf.server.entity.VO.PartsStorageVO;
+import com.hmf.server.model.PartsStorageSearchBody;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -16,7 +18,9 @@ import java.util.List;
  */
 public interface PartsStorageMapper extends BaseMapper<PartsStorage> {
 
-    List<PartsStorageVO> getPartsStorageByPartsName(String partsName);
+    List<PartsStorageVO> searchParts(PartsStorageSearchBody partsStorageSearchBody);
 
-    List<PartsStorageVO> getPartsStorageByCompanyId(Long companyId);
+    int insertPartsStorage(PartsStorage partsStorage);
+
+    int updateEnableById(Long[] ids);
 }

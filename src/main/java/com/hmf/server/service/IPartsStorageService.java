@@ -3,6 +3,7 @@ package com.hmf.server.service;
 import com.hmf.server.entity.PartsStorage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hmf.server.entity.VO.PartsStorageVO;
+import com.hmf.server.model.PartsStorageSearchBody;
 
 import java.util.List;
 
@@ -16,7 +17,12 @@ import java.util.List;
  */
 public interface IPartsStorageService extends IService<PartsStorage> {
 
-    List<PartsStorageVO> getPartsStorageByPartsName (String partsName);
 
-    List<PartsStorageVO> getPartsStorageByCompanyId(Long companyId);
+
+
+    List<PartsStorageVO> searchParts(PartsStorageSearchBody partsStorageSearchBody);
+
+    int insertPartsStorage(PartsStorage partsStorage);
+
+    int updateEnableById(Long[] ids) ;
 }
