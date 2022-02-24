@@ -1,10 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hmf.server.mapper.CarInfoMapper">
-
+    <resultMap id="CarInfoVO" type="com.hmf.server.entity.VO.CarInfoVo">
+        <id property="id" column="id"/>
+        <result property="brandId" column="brand_id"/>
+        <result property="carName" column="car_name"/>
+        <result property="carPictureUrl" column="car_picture_url"/>
+        <result property="carPrice" column="car_price"/>
+        <result property="carTag" column="car_tag"/>
+        <result property="parametersInfo" column="parameters_info"/>
+        <association property="brand" javaType="com.hmf.server.entity.Brand">
+            <id property="id" column="id"/>
+            <result property="brandLogoUrl" column="brand_logo_url"/>
+            <result property="brandName" column="brand_name"/>
+        </association>
+    </resultMap>
     <insert id="saveCarInfo" parameterType="com.hmf.server.entity.CarInfo">
         insert into t_car_info (car_name,car_picture_url,car_price,car_tag,brand_id,parameters_info)
         select #{carName},#{carPictureUrl},#{carPrice},#{carTag},#{brandId},#{parametersInfo} from dual
-        where not exists (SELECT car_name FROM t_car_info WHERE car_name=#{carName} AND parameters_info = #{parametersInfo})
+        where not exists (SELECT car_name FROM t_car_info WHERE car_name=#{carName} AND parameters_info =
+        #{parametersInfo})
     </insert>
+    <select id="getAllCarInfo" resultMap="CarInfoVO">
+        select
+        c.car_name,
+        c.car_tag,
+        c.car_parameters_info,
+        c.car_picture_url,
+        c.car_price,
+        b.brand_name,
+        b.brand_logo_url
+        from t_car_info c
+        left join t_brand on c.brand_id = b.id
+    </select>
+    <select id="unionSearchCarInfo" resultMap="CarInfoVO" parameterType="com.hmf.server.model.CarInfoSearchBody">
+        select
+        c.car_name,
+        c.car_tag,
+        c.parameters_info,
+        c.car_picture_url,
+        c.car_price,
+        b.brand_name
+        from t_car_info c
+        left join t_brand on c.brand_id = b.id
+        <if test="carName !=null">
+            and c.car_name like concat('%',#{carName},'%')
+        </if>
+        <if test="carTag !=null">
+            and c.car_tag like concat('%',#{carTag},'%')
+        </if>
+        <if test="carUpPrice !=null">
+            and c.car_price &lt;=#{carUpPrice}
+        </if>
+        <if test="carLowPrice !=null">
+            and c.car_price &gt;=#{carLowPrice}
+        </if>
+        <if test="brandName !=null">
+            and b.brand_name like concat('%',#{brandName},'%')
+        </if>
+        <if test="brandLogoUrl !=null">
+            and b.brand_logo_url = #{brandLogoUrl}
+        </if>
+        <if test="brandId !=null">
+            and b.id = #{brandId}
+        </if>
+    </select>
 </mapper>

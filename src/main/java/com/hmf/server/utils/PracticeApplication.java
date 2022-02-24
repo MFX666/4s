@@ -27,7 +27,7 @@ public class PracticeApplication {
                             .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "F:\\桌面文档\\毕业设计\\后端代码\\4s\\src\\main\\resources\\mapper")); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("t_car_storage") // 设置需要生成的表名
+                    builder.addInclude("t_car_sale_info") // 设置需要生成的表名
                             .addTablePrefix("t_")
                             .controllerBuilder().enableRestStyle().superClass(BaseController.class)
                             .entityBuilder().enableLombok().columnNaming(NamingStrategy.no_change); // 设置过滤表前缀

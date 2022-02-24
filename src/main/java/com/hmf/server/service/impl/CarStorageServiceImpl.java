@@ -27,4 +27,9 @@ public class CarStorageServiceImpl extends ServiceImpl<CarStorageMapper, CarStor
     public List<CarStorageVo> unionSearchCarStorageInfo(CarStorageBody carStorageBody) {
         return carStorageMapper.unionSearchCarStorageInfo(carStorageBody);
     }
+
+    @Override
+    public int updateEnableById(Long[] ids) {
+        return carStorageMapper.updateEnableById(ids);
+    }
 }

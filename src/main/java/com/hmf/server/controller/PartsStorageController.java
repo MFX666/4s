@@ -38,11 +38,12 @@ public class PartsStorageController extends BaseController {
      * @return
      */
     @ApiModelProperty("零部件库存信息组合查询")
-    @PostMapping("searchParts")
-    public ResponseBean searchParts(PartsStorageSearchBody partsStorageSearchBody) {
+    @PostMapping("/searchParts")
+    public ResponseBean searchParts(@RequestBody PartsStorageSearchBody partsStorageSearchBody) {
         if (partsStorageSearchBody == null) {
             return ResponseBean.error("参数为空");
         } else {
+            System.out.println(partsStorageSearchBody);
             List<PartsStorageVO> list = partsStorageService.searchParts(partsStorageSearchBody);
             return ResponseBean.success(list);
         }

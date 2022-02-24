@@ -18,4 +18,6 @@ import java.util.List;
 public interface ICarStorageService extends IService<CarStorage> {
 
     List<CarStorageVo> unionSearchCarStorageInfo(CarStorageBody carStorageBody);
+
+    int updateEnableById(Long[] ids);
 }

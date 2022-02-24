@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author mfx
- * @since 2022-01-15
+ * @since 2022-01-25
  */
 @Service
 public class CarSaleInfoServiceImpl extends ServiceImpl<CarSaleInfoMapper, CarSaleInfo> implements ICarSaleInfoService {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.hmf.server.controller.BaseController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -34,8 +35,41 @@ public class CarStorageController extends BaseController {
       if(carStorageBody==null){
           return ResponseBean.error("参数为空");
       }else{
+          //默认查询可用
+          carStorageBody.setIsEnable(1);
           List<CarStorageVo> list = iCarStorageService.unionSearchCarStorageInfo(carStorageBody);
           return ResponseBean.success(list);
       }
+    }
+
+    @ApiModelProperty("车辆入库")
+    @PostMapping("/insertCarStorage")
+    public ResponseBean insertCarStorage(@RequestBody List<CarStorage> carStorage){
+        if(carStorage==null){
+            return ResponseBean.error("参数为空");
+        }else{
+            for (CarStorage storage : carStorage) {
+                storage.setCreatetime(LocalDateTime.now());
+            }
+            if(iCarStorageService.saveBatch(carStorage)){
+                return ResponseBean.success("车辆入库成功");
+            }else {
+                return ResponseBean.error("车辆入库失败");
+            }
+        }
+    }
+
+    @ApiModelProperty("车辆出库")
+    @PostMapping("companyCarStorageOut")
+    public ResponseBean companyCarStorageOut(@RequestBody Long[] ids){
+        if(ids==null){
+            return ResponseBean.error("参数为空");
+        }else{
+            if(iCarStorageService.updateEnableById(ids)==ids.length){
+                return ResponseBean.success("出库成功");
+            }else{
+                return ResponseBean.error("出库失败");
+            }
+        }
     }
 }

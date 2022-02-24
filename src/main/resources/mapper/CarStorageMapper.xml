@@ -1,8 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hmf.server.mapper.CarStorageMapper">
-
-    <select id="unionSearchCarStorageInfo" resultType="com.hmf.server.entity.VO.CarStorageVo">
-
+    <resultMap id="CarStorageMap" type="com.hmf.server.entity.VO.CarStorageVo">
+        <id property="id" column="id"/>
+        <result property="createtime" column="creattiem"/>
+        <result property="isEnable" column="is_enable"/>
+        <association property="carInfoVo" javaType="com.hmf.server.entity.VO.CarInfoVo">
+            <id property="id" column="id"/>
+            <result property="brandId" column="brand_id"/>
+            <result property="carName" column="car_name"/>
+            <result property="carPictureUrl" column="car_picture_url"/>
+            <result property="carPrice" column="car_price"/>
+            <result property="carTag" column="car_tag"/>
+            <result property="parametersInfo" column="parameters_info"/>
+        </association>
+        <association property="companyVo" javaType="com.hmf.server.entity.VO.CompanyVo">
+            <id property="id" column="id"/>
+            <result property="companyAddress" column="company_address"/>
+            <result property="companyTelephone" column="company_telephone"/>
+            <result property="companyName" column="company_name"/>
+            <result property="companyNote" column="company_note"/>
+            <result property="createtime" column="createtime"/>
+        </association>
+        <association property="brand" javaType="com.hmf.server.entity.Brand">
+            <id property="id"   column="id"/>
+            <result property="brandName" column="brand_name"/>
+            <result property="brandLogoUrl" column="brand_logo_url"/>
+        </association>
+    </resultMap>
+    <update id="updateEnableById" parameterType="java.util.ArrayList">
+        update t_car_storage set is_enable = 0
+        where id in (
+        <foreach collection="array" item="id" index="index" separator=",">
+            #{id}
+        </foreach>
+        ) and is_enable != 0
+    </update>
+    <select id="unionSearchCarStorageInfo" resultMap="CarStorageMap" parameterType="com.hmf.server.model.CarStorageBody">
+        SELECT
+        cs.id,
+        cs.is_enable,
+        ci.car_name,
+        ci.car_tag,
+        ci.parameters_info,
+        ci.car_price,
+        b.brand_name,
+        b.brand_logo_url,
+        c.company_name,
+        c.company_address,
+        c.company_telephone,
+        c.id
+        FROM
+        t_car_storage cs,
+        t_car_info ci,
+        t_company c,
+        t_brand b
+        WHERE
+        ci.id = cs.car_info_id
+        AND c.id = cs.company_id
+        AND b.id = c.brand_id
+        <if test="carName !=null">
+            and ci.car_name like concat('%',#{carName},'%')
+        </if>
+        <if test="carTag !=null">
+            and ci.car_tag like concat('%',#{carTag},'%')
+        </if>
+        <if test="carUpPrice !=null">
+            and ci.car_price &lt;=#{carUpPrice}
+        </if>
+        <if test="carLowPrice !=null">
+            and ci.car_price &gt;=#{carLowPrice}
+        </if>
+        <if test="brandName !=null">
+            and b.brand_name like concat('%',#{brandName},'%')
+        </if>
+        <if test="brandLogoUrl !=null">
+            and b.brand_logo_url = #{brandLogoUrl}
+        </if>
+        <if test="brandId !=null and brandId.length>0">
+            and b.id in
+            <foreach collection="brandId" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+        <if test="companyName != null">
+            and c.company_name like concat('%',#{companyName},'%')
+        </if>
+        <if test="companyId !=null">
+            and c.id = #{companyId}
+        </if>
+        <if test="companyAddress !=null">
+            and c.company_address like concat('%',#{companyAddress},'%')
+        </if>
+        <if test="isEnable !=null">
+            and cs.is_enable = #{isEnable}
+        </if>
     </select>
 </mapper>

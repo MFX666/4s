@@ -64,10 +64,11 @@
         pf.factory_name,
         pf.factory_address,
         pf.factory_telephone
-        from t_parts_storage pt
-        left join t_parts p on pt.parts_id = p.id
-        left join t_company c on pt.company_id = c.id
-        left join t_parts_factory pf on pt.factory_id = pf.id
+        from t_parts_storage pt,join t_parts p,t_company c,t_parts_factory pf
+        where
+        pt.parts_id = p.id
+        and pt.company_id = c.id
+        adn pt.factory_id = pf.id
         <if test="companyId != null">
             and pt.company_id = #{companyId}
         </if>
@@ -81,7 +82,7 @@
             and p.parts_tag = #{partsTag}
         </if>
         <if test="companyName !=null">
-            and c.company_name like #{companyName}
+            and c.company_name like concat ('%',#{companyName},'%')
         </if>
     </select>
 

@@ -44,10 +44,11 @@ public class CompanyController extends BaseController {
             if(iCompanyService.updateCompanyInfo(company)>0){
                 return ResponseBean.success("更新成功");
             }else{
-                return ResponseBean.error("更新失败");
+                return ResponseBean.error("企业已存在，请检查");
             }
         }
     }
+
     @ApiModelProperty("添加企业信息")
     @PostMapping("/insertCompanyInfo")
     public ResponseBean insertCompanyInf(@RequestBody Company company){
@@ -57,7 +58,7 @@ public class CompanyController extends BaseController {
            if(iCompanyService.insertCompanyInfo(company)>0){
                return ResponseBean.success("添加成功");
            }else {
-               return ResponseBean.error("添加失败");
+               return ResponseBean.error("企业已存在，请勿重复添加");
            }
         }
     }
@@ -72,4 +73,5 @@ public class CompanyController extends BaseController {
             return ResponseBean.success(list);
         }
     }
+
 }

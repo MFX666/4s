@@ -47,7 +47,7 @@
         from t_company c
         left join t_brand b on c.brand_id = b.id
     </select>
-    <select id="unionSearchCompanyInfo" resultType="com.hmf.server.entity.VO.CompanyVo">
+    <select id="unionSearchCompanyInfo" resultMap="CompanyVoMap" parameterType="com.hmf.server.model.CompanySearchBody">
         select
         c.company_name,
         c.company_address,
@@ -59,19 +59,19 @@
         from t_company c
         left join t_brand b on c.brand_id = b.id
         <if test="companyId != null">
-            and company_id=#{companyId}
+            and c.company_id=#{companyId}
         </if>
         <if test="companyName != null">
-            and company_name like#{companyName}
-        </if>
-        <if test="brandId != null">
-            and brand_id =#{brandId}
-        </if>
-        <if test="brandName != null">
-            and brand_name like #{brandName}
+            and c.company_name like concat('%',#{companyName},'%')
         </if>
         <if test="companyAddress != null">
-            and company_address like #{companyAddress}
+            and c.company_address like concat('%',#{companyAddress},'%')
+        </if>
+        <if test="brandId != null">
+            and b.brand_id lick concat('%',#{brandId},'%')
+        </if>
+        <if test="brandName != null">
+            and b.brand_name like concat('%',#{brandName},'%')
         </if>
     </select>
 </mapper>

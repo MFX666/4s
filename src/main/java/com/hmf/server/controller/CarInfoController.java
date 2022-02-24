@@ -1,16 +1,16 @@
 package com.hmf.server.controller;
 
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hmf.server.entity.CarInfo;
+import com.hmf.server.entity.VO.CarInfoVo;
+import com.hmf.server.model.CarInfoSearchBody;
 import com.hmf.server.model.ResponseBean;
 import com.hmf.server.service.ICarInfoService;
 
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,19 +29,20 @@ public class CarInfoController extends BaseController {
     @ApiOperation("获取所有车辆信息")
     @GetMapping("/getAllCarInfo")
     public ResponseBean getAllCarInfo() {
-        return ResponseBean.success(iCarInfoService.list());
+        List<CarInfoVo> list = iCarInfoService.getAllCarInfo();
+        return ResponseBean.success(list);
     }
-    @ApiOperation("通过品牌id查找车辆")
-    @GetMapping("/getCarInfoByBrandId/{brandId}")
-    public ResponseBean getCarInfoByBrandId(@PathVariable Integer brandId) {
-        if (brandId == null) {
-            return ResponseBean.error("参数为空");
-        } else {
-            QueryWrapper<CarInfo> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("brand_id",brandId);
-           return ResponseBean.success(iCarInfoService.list(queryWrapper));
-        }
-    }
+//    @ApiOperation("通过品牌id查找车辆")
+//    @GetMapping("/getCarInfoByBrandId/{brandId}")
+//    public ResponseBean getCarInfoByBrandId(@PathVariable Integer brandId) {
+//        if (brandId == null) {
+//            return ResponseBean.error("参数为空");
+//        } else {
+//            QueryWrapper<CarInfo> queryWrapper = new QueryWrapper<>();
+//            queryWrapper.eq("brand_id",brandId);
+//           return ResponseBean.success(iCarInfoService.list(queryWrapper));
+//        }
+//    }
 
     @ApiOperation("添加车辆信息")
     @PostMapping("/addCarInfo")
@@ -58,20 +59,28 @@ public class CarInfoController extends BaseController {
         }
     }
 
-    @ApiOperation("通过车名查找车辆信息")
-    @GetMapping("/getCarInfoByCarName/{carName}")
-    public ResponseBean getCarInfoByCarName(@PathVariable String carName){
-        if(carName==null){
+//    @ApiOperation("通过车名查找车辆信息")
+//    @GetMapping("/getCarInfoByCarName/{carName}")
+//    public ResponseBean getCarInfoByCarName(@PathVariable String carName){
+//        if(carName==null){
+//            return ResponseBean.error("参数为空");
+//        }else{
+//            QueryWrapper<CarInfo> queryWrapper = new QueryWrapper<>();
+//            queryWrapper.like("car_name", carName);
+//            List<CarInfo> carInfos = iCarInfoService.list(queryWrapper);
+//            return ResponseBean.success(carInfos);
+//        }
+//    }
+
+    @ApiModelProperty("组合查询车辆信息")
+    @PostMapping("/unionSearchCarInfo")
+    public ResponseBean unionSearchCarInfo(@RequestBody CarInfoSearchBody carInfoSearchBody){
+        if(carInfoSearchBody==null){
             return ResponseBean.error("参数为空");
         }else{
-            QueryWrapper<CarInfo> queryWrapper = new QueryWrapper<>();
-            queryWrapper.like("car_name", carName);
-            List<CarInfo> carInfos = iCarInfoService.list(queryWrapper);
-            return ResponseBean.success(carInfos);
+            List<CarInfoVo> list = iCarInfoService.unionSearchCarInfo(carInfoSearchBody);
+            return ResponseBean.success(list);
         }
     }
-
-
-
 
 }

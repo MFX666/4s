@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author mfx
- * @since 2022-01-15
+ * @since 2022-01-25
  */
 public interface CarSaleInfoMapper extends BaseMapper<CarSaleInfo> {
 
