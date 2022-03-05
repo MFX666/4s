@@ -32,9 +32,9 @@ public class CarSaleInfo implements Serializable {
     @TableField("car_storage_id")
     private Long carStorageId;
 
-    @ApiModelProperty("销售员工id")
-    @TableField("sale_man_id")
-    private Long saleManId;
+    @ApiModelProperty("销售员工姓名")
+    @TableField("sale_man_name")
+    private String saleManName;
 
     @ApiModelProperty("购买人")
     @TableField("buy_man_name")
@@ -50,5 +50,8 @@ public class CarSaleInfo implements Serializable {
     @ApiModelProperty("备注")
     private String note;
 
+    @ApiModelProperty("是否结算")//0未结算、1已结算
+    @TableField("is_settlement")
+    private String isSettlement;
 
 }

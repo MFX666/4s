@@ -1,6 +1,8 @@
 package com.hmf.server.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -15,7 +17,7 @@ import lombok.Setter;
  * </p>
  *
  * @author mfx
- * @since 2022-01-08
+ * @since 2022-02-24
  */
 @Getter
 @Setter
@@ -26,6 +28,7 @@ public class Record implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("记录id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty("维修描述/检测描述")
@@ -44,15 +47,7 @@ public class Record implements Serializable {
     @TableField("repair_money")
     private String repairMoney;
 
-    @ApiModelProperty("记录类型")
-    @TableField("record_type")
-    private String recordType;
-
-    @ApiModelProperty("结算类型")
-    @TableField("money_type")
-    private String moneyType;
-
-    @ApiModelProperty("是否结算")
+    @ApiModelProperty("是否结算")//0未结算、1已结算
     @TableField("is_settlement")
     private String isSettlement;
 
@@ -62,9 +57,17 @@ public class Record implements Serializable {
     @ApiModelProperty("修改时间")
     private LocalDateTime updatetime;
 
-    @ApiModelProperty("客户评论")
-    @TableField("customer_note")
-    private String customerNote;
+    @ApiModelProperty("车牌号")
+    @TableField("car_brandno")
+    private String carBrandno;
+
+    @ApiModelProperty("车主姓名")
+    @TableField("customer_name")
+    private String customerName;
+
+    @ApiModelProperty("车主电话")
+    @TableField("customer_telephone")
+    private String customerTelephone;
 
 
 }

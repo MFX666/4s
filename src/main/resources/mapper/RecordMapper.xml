@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hmf.server.mapper.RecordMapper">
-
+    <resultMap id="BaseMap" type="com.hmf.server.entity.Record">
+        <id column="id" property="id"/>
+        <result property="createtime" column="createtime"/>
+        <result property="updatetime" column="updatetime"/>
+        <result property="carBrandno" column="car_brandno"/>
+        <result property="customerName" column="customer_name"/>
+        <result property="customerTelephone" column="customer_telephone"/>
+        <result property="isSettlement" column="is_settlement"/>
+        <result property="recordName" column="record_name"/>
+        <result property="recordNote"   column="record_note"/>
+        <result property="repairMoney" column="repair_money"/>
+        <result property="repairStaff" column="repair_staff"/>
+    </resultMap>
+    <select id="unionSearchWxRecord" parameterType="com.hmf.server.model.SearchWxRecordBody" resultMap="BaseMap">
+        select
+        *
+        from
+        t_record t
+        where
+        <if test="customerName !=null">
+            and t.customer_name like concat('%',#{customerName},'%')
+        </if>
+        <if test="customerTelephone !=null">
+            and t.customer_telephone like concat('%',#{customerTelephone},'%')
+        </if>
+        <if test="carBrandNumber !=null">
+            and t.car_brandno like concat('%',#{carBrandNumber},'%')
+        </if>
+    </select>
 </mapper>

@@ -14,6 +14,7 @@
             <result property="carTag" column="car_tag"/>
             <result property="parametersInfo" column="parameters_info"/>
         </association>
+<!--        <association property="companyVo" javaType="com.hmf.server.entity.VO.CompanyVo" resultMap="com.hmf.server.mapper.CompanyMapper.CompanyVoMap"/>-->
         <association property="companyVo" javaType="com.hmf.server.entity.VO.CompanyVo">
             <id property="id" column="id"/>
             <result property="companyAddress" column="company_address"/>
@@ -59,6 +60,12 @@
         ci.id = cs.car_info_id
         AND c.id = cs.company_id
         AND b.id = c.brand_id
+        <if test="ids !=null and ids.length>0">
+            and cs.id in
+            <foreach collection="ids" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
         <if test="carName !=null">
             and ci.car_name like concat('%',#{carName},'%')
         </if>
@@ -78,7 +85,7 @@
             and b.brand_logo_url = #{brandLogoUrl}
         </if>
         <if test="brandId !=null and brandId.length>0">
-            and b.id in
+            and ci.brand_id in
             <foreach collection="brandId" item="id" open="(" separator="," close=")">
                 #{id}
             </foreach>

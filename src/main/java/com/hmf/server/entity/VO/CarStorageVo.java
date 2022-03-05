@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 public class CarStorageVo extends CarStorage {
     private CarInfoVo carInfoVo;
-    private Company companyVo;
+    private CompanyVo companyVo;
     private Brand brand;
 }

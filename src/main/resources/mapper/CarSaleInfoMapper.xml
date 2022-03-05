@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hmf.server.mapper.CarSaleInfoMapper">
-
+    <resultMap id="BaseMap" type="com.hmf.server.entity.VO.CarSaleInfoVo">
+        <association property="carStorageVo" javaType="com.hmf.server.entity.VO.CarStorageVo" resultMap="com.hmf.server.mapper.CarStorageMapper.CarStorageMap"/>
+    </resultMap>
+    <select id="unionSearchCarSaleInfo" resultMap="BaseMap" parameterType="com.hmf.server.model.CarSaleInfoSearchBody">
+        SELECT
+        csi.id,
+        csi.sale_man_name,
+        csi.buy_man_name,
+        csi.createtime,
+        csi.buy_type,
+        csi.is_settlement,
+        csi.note,
+        ci.car_name,
+        ci.car_picture_url,
+        ci.car_price,
+        ci.car_tag,
+        ci.brand_id,
+        ci.parameters_info
+        FROM
+        t_car_sale_info csi,
+        t_car_storage sc,
+        t_car_info ci
+        WHERE
+        sc.id=csi.car_storage_id
+        AND
+        sc.car_Info_id=ci.id
+        <if test="companyId !=null">
+            and sc.companyId =#{companyId}
+        </if>
+        <if test="consumerName !=null">
+            and sci.buy_man_name like concat('%',#{consumerName},'%')
+        </if>
+    </select>
 </mapper>

@@ -14,4 +14,5 @@ public class CarStorageBody extends CarInfoSearchBody {
     private Long companyId;
     private int isEnable;
     private String companyAddress;
+    private Long[] ids;
 }
