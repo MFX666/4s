@@ -59,5 +59,21 @@ public class PartsStorage implements Serializable {
     @TableField("parts_id")
     private Long partsId;
 
+    @ApiModelProperty("厂家名称")
+    @TableField("factory_name")
+    private String factoryName;
+
+
+    @ApiModelProperty("企业名称")
+    @TableField("company_name")
+    private String companyName;
+
+    @ApiModelProperty("零件名称")
+    @TableField("parts_name")
+    private String partsName;
+
+    @ApiModelProperty("零件分类")
+    @TableField("parts_tag")
+    private String partsTag;
 
 }

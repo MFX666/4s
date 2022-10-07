@@ -2,10 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hmf.server.mapper.CarSaleInfoMapper">
     <resultMap id="BaseMap" type="com.hmf.server.entity.VO.CarSaleInfoVo">
-        <association property="carStorageVo" javaType="com.hmf.server.entity.VO.CarStorageVo" resultMap="com.hmf.server.mapper.CarStorageMapper.CarStorageMap"/>
+        <id property="id" column="id"/>
+        <result property="buyManName" column="buy_man_name"/>
+        <result property="createtime" column="createtime"/>
+        <result property="isSettlement" column="is_settlement"/>
+        <result property="buyType" column="buy_type"/>
+        <result property="note" column="note"/>
+        <result property="saleManName" column="sale_man_name"/>
+        <result property="carStorageId" column="car_storage_id"/>
+        <result property="brandName" column="brand_name"/>
+        <result property="carTag" column="car_tag"/>
+        <result property="carPrice" column="car_price"/>
+        <result property="carPictureUrl" column="car_picture_url"/>
+        <result property="carName" column="car_name"/>
+        <result property="carParameterInfo" column="parameters_info"/>
+        <result property="companyName" column="company_name"/>
     </resultMap>
     <select id="unionSearchCarSaleInfo" resultMap="BaseMap" parameterType="com.hmf.server.model.CarSaleInfoSearchBody">
         SELECT
+        csi.car_storage_id,
         csi.id,
         csi.sale_man_name,
         csi.buy_man_name,
@@ -13,22 +28,34 @@
         csi.buy_type,
         csi.is_settlement,
         csi.note,
+        ci.id,
         ci.car_name,
         ci.car_picture_url,
         ci.car_price,
         ci.car_tag,
         ci.brand_id,
-        ci.parameters_info
+        ci.parameters_info,
+        c.company_name,
+        b.brand_name
         FROM
         t_car_sale_info csi,
         t_car_storage sc,
-        t_car_info ci
+        t_car_info ci,
+        t_company c,
+        t_brand b
         WHERE
-        sc.id=csi.car_storage_id
+        csi.car_storage_id=sc.id
+        AND
+        ci.brand_id =b.id
         AND
         sc.car_Info_id=ci.id
-        <if test="companyId !=null">
-            and sc.companyId =#{companyId}
+        AND
+        c.id = sc.company_id
+        <if test="companyId !=null and companyId.length>0">
+            and sc.company_id in
+            <foreach collection="companyId" item="id" open="(" separator="," close=")">
+                #{companyId}
+            </foreach>
         </if>
         <if test="consumerName !=null">
             and sci.buy_man_name like concat('%',#{consumerName},'%')

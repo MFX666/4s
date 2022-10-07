@@ -29,20 +29,19 @@ public class BrandController extends BaseController {
 
     @GetMapping("/getAllBrands")
     public ResponseBean getAllBrands() {
-        return ResponseBean.success("获取成功",iBrandService.list());
+        return ResponseBean.success("获取成功", iBrandService.list());
     }
 
     @PostMapping("/addBrand")
-    public ResponseBean addBrand(@RequestBody Brand brand){
-        if(brand==null){
+    public ResponseBean addBrand(@RequestBody Brand brand) {
+        if (brand == null) {
             return ResponseBean.error("参数为空！");
-        }else{
-            if(iBrandService.insertBrandInfo(brand)>0){
+        } else {
+            if (iBrandService.insertBrandInfo(brand) > 0) {
                 return ResponseBean.success("添加成功");
-            }else {
+            } else {
                 return ResponseBean.error("该品牌已存在请勿重复添加");
             }
         }
     }
-
 }

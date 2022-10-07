@@ -6,10 +6,16 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -28,7 +34,7 @@ public class Record implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("记录id")
-    @TableId(value = "id", type = IdType.AUTO)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     @ApiModelProperty("维修描述/检测描述")
@@ -52,10 +58,14 @@ public class Record implements Serializable {
     private String isSettlement;
 
     @ApiModelProperty("创建时间")
-    private LocalDateTime createtime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
+    private Date createtime;
 
     @ApiModelProperty("修改时间")
-    private LocalDateTime updatetime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date updatetime;
 
     @ApiModelProperty("车牌号")
     @TableField("car_brandno")
@@ -69,5 +79,9 @@ public class Record implements Serializable {
     @TableField("customer_telephone")
     private String customerTelephone;
 
+    @TableField("company_id")
+    private long companyId;
 
+    @TableField("company_name")
+    private String companyName;
 }

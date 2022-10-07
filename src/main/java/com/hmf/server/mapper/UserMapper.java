@@ -1,7 +1,10 @@
 package com.hmf.server.mapper;
 
+import com.hmf.server.entity.Role;
 import com.hmf.server.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,4 +17,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface UserMapper extends BaseMapper<User> {
 
     User getUserInfoById();
+
+
+    User getUserByUserName(String username);
 }

@@ -3,14 +3,13 @@
 <mapper namespace="com.hmf.server.mapper.CarInfoMapper">
     <resultMap id="CarInfoVO" type="com.hmf.server.entity.VO.CarInfoVo">
         <id property="id" column="id"/>
-        <result property="brandId" column="brand_id"/>
         <result property="carName" column="car_name"/>
         <result property="carPictureUrl" column="car_picture_url"/>
         <result property="carPrice" column="car_price"/>
         <result property="carTag" column="car_tag"/>
         <result property="parametersInfo" column="parameters_info"/>
         <association property="brand" javaType="com.hmf.server.entity.Brand">
-            <id property="id" column="id"/>
+            <id property="id" column="brand_id"/>
             <result property="brandLogoUrl" column="brand_logo_url"/>
             <result property="brandName" column="brand_name"/>
         </association>
@@ -23,26 +22,32 @@
     </insert>
     <select id="getAllCarInfo" resultMap="CarInfoVO">
         select
-        c.car_name,
-        c.car_tag,
-        c.car_parameters_info,
-        c.car_picture_url,
-        c.car_price,
-        b.brand_name,
-        b.brand_logo_url
-        from t_car_info c
-        left join t_brand on c.brand_id = b.id
-    </select>
-    <select id="unionSearchCarInfo" resultMap="CarInfoVO" parameterType="com.hmf.server.model.CarInfoSearchBody">
-        select
+        c.id,
         c.car_name,
         c.car_tag,
         c.parameters_info,
         c.car_picture_url,
         c.car_price,
-        b.brand_name
-        from t_car_info c
-        left join t_brand on c.brand_id = b.id
+        c.brand_id,
+        b.id as brand_id,
+        b.brand_name,
+        b.brand_logo_url
+        from t_car_info c , t_brand b
+        where c.brand_id = b.id
+    </select>
+    <select id="unionSearchCarInfo" resultMap="CarInfoVO" parameterType="com.hmf.server.model.CarInfoSearchBody">
+        select
+        c.id,
+        c.car_name,
+        c.car_tag,
+        c.parameters_info,
+        c.car_picture_url,
+        c.car_price,
+        b.brand_name,
+        b.id as brand_id
+        from t_car_info c,
+        t_brand b
+        where c.brand_id = b.id
         <if test="carName !=null">
             and c.car_name like concat('%',#{carName},'%')
         </if>
@@ -56,13 +61,16 @@
             and c.car_price &gt;=#{carLowPrice}
         </if>
         <if test="brandName !=null">
-            and b.brand_name like concat('%',#{brandName},'%')
+            and b.brand_name = #{brandName}
         </if>
         <if test="brandLogoUrl !=null">
             and b.brand_logo_url = #{brandLogoUrl}
         </if>
-        <if test="brandId !=null">
-            and b.id = #{brandId}
+        <if test="brandId !=null and brandId.length>0">
+            and c.brand_id in
+            <foreach collection="brandId" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
         </if>
     </select>
 </mapper>

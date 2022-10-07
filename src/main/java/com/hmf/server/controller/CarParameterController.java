@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author mfx
@@ -30,21 +30,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class CarParameterController extends BaseController {
     @Autowired
     private ICarParameterService iCarParameterService;
+
     @ApiModelProperty("获取所有的汽车参数信息")
     @GetMapping("/getAllParameters")
-    public ResponseBean getAllParameters(){
+    public ResponseBean getAllParameters() {
         return ResponseBean.success(iCarParameterService.list());
     }
+
     @ApiModelProperty("通过分类标签获取汽车参数信息 ")
     @GetMapping("/getParametersByTag/{tag}")
-    public ResponseBean getParametersByTag(@PathVariable String tag){
-        if(tag==null){
+    public ResponseBean getParametersByTag(@PathVariable String tag) {
+        if (tag == null) {
             return ResponseBean.error("参数为空");
-        }else {
+        } else {
             QueryWrapper<CarParameter> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("parameter_tag",tag);
+            queryWrapper.eq("parameter_tag", tag);
             return ResponseBean.success(iCarParameterService.list(queryWrapper));
         }
     }
-
 }

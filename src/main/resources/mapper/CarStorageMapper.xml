@@ -6,7 +6,7 @@
         <result property="createtime" column="creattiem"/>
         <result property="isEnable" column="is_enable"/>
         <association property="carInfoVo" javaType="com.hmf.server.entity.VO.CarInfoVo">
-            <id property="id" column="id"/>
+            <id property="id" column="car_info_id"/>
             <result property="brandId" column="brand_id"/>
             <result property="carName" column="car_name"/>
             <result property="carPictureUrl" column="car_picture_url"/>
@@ -14,20 +14,15 @@
             <result property="carTag" column="car_tag"/>
             <result property="parametersInfo" column="parameters_info"/>
         </association>
-<!--        <association property="companyVo" javaType="com.hmf.server.entity.VO.CompanyVo" resultMap="com.hmf.server.mapper.CompanyMapper.CompanyVoMap"/>-->
-        <association property="companyVo" javaType="com.hmf.server.entity.VO.CompanyVo">
-            <id property="id" column="id"/>
+        <association property="company" javaType="com.hmf.server.entity.VO.CompanyVo">
+            <id property="id" column="company_id"/>
             <result property="companyAddress" column="company_address"/>
             <result property="companyTelephone" column="company_telephone"/>
             <result property="companyName" column="company_name"/>
             <result property="companyNote" column="company_note"/>
             <result property="createtime" column="createtime"/>
         </association>
-        <association property="brand" javaType="com.hmf.server.entity.Brand">
-            <id property="id"   column="id"/>
-            <result property="brandName" column="brand_name"/>
-            <result property="brandLogoUrl" column="brand_logo_url"/>
-        </association>
+
     </resultMap>
     <update id="updateEnableById" parameterType="java.util.ArrayList">
         update t_car_storage set is_enable = 0
@@ -39,18 +34,22 @@
     </update>
     <select id="unionSearchCarStorageInfo" resultMap="CarStorageMap" parameterType="com.hmf.server.model.CarStorageBody">
         SELECT
+        cs.car_info_id,
         cs.id,
         cs.is_enable,
+        cs.company_id,
         ci.car_name,
         ci.car_tag,
         ci.parameters_info,
         ci.car_price,
+        ci.car_picture_url,
         b.brand_name,
         b.brand_logo_url,
         c.company_name,
         c.company_address,
         c.company_telephone,
-        c.id
+        c.id,
+        b.id
         FROM
         t_car_storage cs,
         t_car_info ci,

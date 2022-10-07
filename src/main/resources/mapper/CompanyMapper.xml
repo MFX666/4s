@@ -3,6 +3,7 @@
 <mapper namespace="com.hmf.server.mapper.CompanyMapper">
     <resultMap id="CompanyVoMap" type="com.hmf.server.entity.VO.CompanyVo">
         <id property="id" column="id"/>
+        <result property="id" column="id"/>
         <result property="companyAddress" column="company_address"/>
         <result property="companyTelephone" column="company_telephone"/>
         <result property="companyName" column="company_name"/>
@@ -10,7 +11,8 @@
         <result property="createtime" column="createtime"/>
         <result property="updatetime" column="updatetime"/>
         <association property="brand" javaType="com.hmf.server.entity.Brand">
-            <id property="id" column="id"/>
+            <id property="id" column="brand_id"/>
+            <result property="id" column="id"/>
             <result property="brandName" column="brand_name"/>
             <result property="brandLogoUrl" column="brand_logo_url"/>
         </association>
@@ -42,6 +44,7 @@
         c.company_telephone,
         b.brand_name,
         b.brand_logo_url,
+        b.id,
         c.createtime,
         c.company_note
         from t_company c

@@ -1,5 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hmf.server.mapper.MenuMapper">
+    <resultMap id="BaseResultMap" type="com.hmf.server.entity.Menu">
+        <id column="id" property="id"/>
+        <result column="url" property="url"/>
+        <result column="path" property="path"/>
+        <result column="component" property="component"/>
+        <result column="name" property="name"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="enabled" property="enabled"/>
+    </resultMap>
+    <resultMap id="MenusWithRole" type="com.hmf.server.entity.Menu" extends="BaseResultMap">
+        <collection property="roles" ofType="com.hmf.server.entity.Role">
+            <id column="rid" property="id"/>
+            <result column="role_name" property="roleName"/>
+            <result column="role_real_name" property="roleRealName"/>
+        </collection>
+    </resultMap>
+    <resultMap id="MenusWithChildren" type="com.hmf.server.entity.Menu" extends="BaseResultMap">
+        <id column="id1" property="id"/>
+        <result column="name1" property="name"/>
+        <collection property="children" ofType="com.hmf.server.entity.Menu">
+            <id column="id2" property="id"/>
+            <result column="name2" property="name"/>
+            <collection property="children" ofType="com.hmf.server.entity.Menu">
+                <id column="id3" property="id"/>
+                <result column="name3" property="name"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <resultMap id="Menus" type="com.hmf.server.entity.Menu" extends="BaseResultMap">
+        <collection property="children" ofType="com.hmf.server.entity.Menu">
+            <id column="id2" property="id"/>
+            <result column="url2" property="url"/>
+            <result column="path2" property="path"/>
+            <result column="component2" property="component"/>
+            <result column="name2" property="name"/>
+            <result column="parentId2" property="parentId"/>
+            <result column="enabled2" property="enabled"/>
+        </collection>
+    </resultMap>
+    <select id="getAllMenus" resultMap="MenusWithChildren">
+        SELECT
+        m1.id as id1,
+        m1.`name` as name1,
+        m2.id as id2,
+        m2.`name` as name2,
+        m3.id as id3,
+        m3.`name` as name3
+        FROM
+        t_menu m1,
+        t_menu m2,
+        t_menu m3
+        WHERE
+        m1.id=m2.parent_id
+        AND
+        m2.id=m3.parent_id
+        AND
+        m3.enabled=TRUE
+    </select>
+    <select id="getMenusByRoles" resultMap="MenusWithRole">
+        SELECT
+        m.*,
+        r.id AS rid,
+        r.role_name,
+        r.role_real_name
+        FROM
+        t_menu m,
+        t_menu_role mr,
+        t_role r
+        WHERE
+        m.id = mr.menu_id
+        AND r.id = mr.role_id
+        ORDER BY
+        m.id
+    </select>
+    <select id="getMenusByAdminId" resultMap="Menus" >
+        SELECT DISTINCT
+        m1.*,
+        m2.name as name2,
+        m2.id AS id2,
+        m2.url AS url2,
+        m2.path AS path2,
+        m2.component AS component2,
+        m2.parent_id AS parentId2,
+        m2.enabled AS enabled2
+        FROM
+        t_menu m1,
+        t_menu m2,
+        t_menu_role mr,
+        t_user u
+        WHERE
+        m1.id = m2.parent_id
+        AND m2.id = mr.menu_id
+        AND mr.role_id = u.role_id
+        AND m2.enabled = TRUE
+        AND m1.id!=1
+        AND u.id = #{adminId}
+        ORDER BY
+        m2.id
+    </select>
 
 </mapper>

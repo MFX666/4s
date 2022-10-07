@@ -1,7 +1,6 @@
 package com.hmf.server.controller;
 
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hmf.server.entity.PartsFactory;
 import com.hmf.server.model.ResponseBean;
@@ -48,7 +47,7 @@ public class PartsFactoryController extends BaseController {
         if (partsFactory == null) {
             return ResponseBean.error("参数为空");
         } else {
-            if (iPartsFactoryService.insertPartsFactory(partsFactory) > 0) {
+            if (iPartsFactoryService.save(partsFactory)) {
                 return ResponseBean.success("添加成功");
             } else {
                 return ResponseBean.error("该零部件厂家已存在，请勿重复添加");

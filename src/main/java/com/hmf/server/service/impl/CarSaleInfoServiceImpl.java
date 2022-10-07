@@ -1,6 +1,5 @@
 package com.hmf.server.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hmf.server.entity.CarSaleInfo;
 import com.hmf.server.entity.CarStorage;
 import com.hmf.server.entity.VO.CarSaleInfoVo;
@@ -48,6 +47,7 @@ public class CarSaleInfoServiceImpl extends ServiceImpl<CarSaleInfoMapper, CarSa
             result.put("message","该车已售卖");
             result.put("code", 1);
         }
+        carSaleInfo.setIsSettlement("未结算");
         if(this.save(carSaleInfo)){
             carStorage.setIsEnable(0);
             carStorageService.updateById(carStorage);

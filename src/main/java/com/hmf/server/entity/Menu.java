@@ -3,10 +3,13 @@ package com.hmf.server.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -14,10 +17,11 @@ import lombok.Setter;
  * </p>
  *
  * @author mfx
- * @since 2022-01-08
+ * @since 2022-03-07
  */
 @Getter
 @Setter
+@ToString
 @TableName("t_menu")
 @ApiModel(value = "Menu对象", description = "")
 public class Menu implements Serializable {
@@ -28,20 +32,30 @@ public class Menu implements Serializable {
     private Long id;
 
     @ApiModelProperty("菜单路径")
-    @TableField("menu_url")
-    private String menuUrl;
+    private String url;
 
-    @ApiModelProperty("菜单名字")
-    @TableField("menu_name")
-    private String menuName;
+    @ApiModelProperty("菜单路由")
+    private String path;
 
-    @ApiModelProperty("父菜单id")
+    @ApiModelProperty("组件名")
+    private String component;
+
+    @ApiModelProperty("菜单名")
+    private String name;
+
+    @ApiModelProperty("父id")
     @TableField("parent_id")
     private Long parentId;
 
-    @ApiModelProperty("子菜单id")
-    @TableField("children_id")
-    private Long childrenId;
+    @ApiModelProperty("是否可用 1--可用 ，2--不可用")
+    private Boolean enabled;
 
+    @ApiModelProperty("子菜单")
+    @TableField(exist = false)
+    private List<Menu> children;
+
+    @ApiModelProperty("角色列表")
+    @TableField(exist = false)
+    private List<Role> roles;
 
 }

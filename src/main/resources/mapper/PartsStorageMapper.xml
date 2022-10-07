@@ -7,22 +7,32 @@
         <result property="createtime" column="createtime"/>
         <result property="partsPrice" column="parts_price"/>
         <association property="parts" javaType="com.hmf.server.entity.Parts">
-            <id property="id" column="id"/>
+            <id property="id" column="parts_id"/>
             <result property="partsName" column="parts_name"/>
             <result property="partsTag" column="parts_tag"/>
         </association>
         <association property="company" javaType="com.hmf.server.entity.Company">
-            <id property="id" column="id"/>
+            <id property="id" column="company_id"/>
             <result property="companyName" column="company_name"/>
             <result property="companyTelephone" column="company_telephone"/>
             <result property="companyAddress" column="company_address"/>
         </association>
         <association property="partsFactory" javaType="com.hmf.server.entity.PartsFactory">
-            <id property="id" column="id"/>
+            <id property="id" column="factory_id"/>
             <result property="factoryAddress" column="factory_address"/>
             <result property="factoryName" column="factory_name"/>
             <result property="factoryTelephone" column="factory_telephone"/>
         </association>
+    </resultMap>
+    <resultMap id="baseMap" type="com.hmf.server.entity.PartsStorage">
+        <id property="id" column="id"/>
+        <result property="partsNumber" column="parts_number"/>
+        <result property="createtime" column="createtime"/>
+        <result property="partsPrice" column="parts_price"/>
+        <result property="partsName" column="parts_name"/>
+        <result property="partsTag" column="parts_tag"/>
+        <result property="companyName" column="company_name"/>
+        <result property="factoryName" column="factory_name"/>
     </resultMap>
     <insert id="insertPartsStorage">
         insert into t_parts_storage (factory_id,parts_number,parts_price,company_id,createtime,parts_id)
@@ -50,39 +60,28 @@
     <!--        left join t_company c on pt.company_id = c.id-->
     <!--        and pt.is_enable = 1;-->
     <!--    </select>-->
-    <select id="searchParts" resultMap="PartsStorageVOMap" parameterType="com.hmf.server.model.PartsStorageSearchBody">
+    <sql id="allInfo">
+        `id`, `factory_id`, `parts_number`, `parts_price`, `is_enable`, `company_id`, `createtime`, `factory_name`,
+        `company_name`, `parts_name`, `parts_tag`, `parts_id
+    </sql>
+    <select id="searchParts" resultMap="baseMap" parameterType="com.hmf.server.model.PartsStorageSearchBody">
         select
-        pt.id,
-        pt.parts_number,
-        p.parts_name,
-        p.parts_tag,
-        pt.parts_price,
-        pt.createtime,
-        c.company_name,
-        c.company_address,
-        c.company_telephone,
-        pf.factory_name,
-        pf.factory_address,
-        pf.factory_telephone
-        from t_parts_storage pt,join t_parts p,t_company c,t_parts_factory pf
-        where
-        pt.parts_id = p.id
-        and pt.company_id = c.id
-        adn pt.factory_id = pf.id
+        <include refid="allInfo"/>
+        where 1=1
         <if test="companyId != null">
-            and pt.company_id = #{companyId}
+            and company_id = #{companyId}
         </if>
-        <if test="isEnable !=null">
-            and pt.is_enable = #{isEnable}
+        <if test="isEnable !=null ">
+            and is_enable = #{isEnable}
         </if>
         <if test="partsName !=null">
-            and p.parts_name like concat ('%',#{partsName},'%')
+            and parts_name like concat ('%',#{partsName},'%')
         </if>
         <if test="partsTag !=null">
-            and p.parts_tag = #{partsTag}
+            and parts_tag = #{partsTag}
         </if>
         <if test="companyName !=null">
-            and c.company_name like concat ('%',#{companyName},'%')
+            and company_name like concat ('%',#{companyName},'%')
         </if>
     </select>
 

@@ -1,6 +1,7 @@
 package com.hmf.server.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hmf.server.entity.Role;
 import com.hmf.server.model.ResponseBean;
 import com.hmf.server.service.IRoleService;
@@ -29,7 +30,7 @@ public class RoleController extends BaseController {
      */
     @GetMapping("/getAllRoleInfo")
     public ResponseBean getAllRoleInfo(){
-        return ResponseBean.success("获取成功",iRoleService.list());
+        return ResponseBean.success("获取成功",iRoleService.list(new LambdaQueryWrapper<Role>().ne(Role::getRoleName,"ROLE_ADMIN")));
     }
 
     /**

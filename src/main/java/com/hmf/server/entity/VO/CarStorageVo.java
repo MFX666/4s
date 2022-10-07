@@ -1,6 +1,6 @@
 package com.hmf.server.entity.VO;
 
-import com.hmf.server.entity.Brand;
+
 import com.hmf.server.entity.CarStorage;
 import com.hmf.server.entity.Company;
 import lombok.Data;
@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 public class CarStorageVo extends CarStorage {
     private CarInfoVo carInfoVo;
-    private CompanyVo companyVo;
-    private Brand brand;
+    private Company company;
+
 }

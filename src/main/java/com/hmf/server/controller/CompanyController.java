@@ -1,13 +1,22 @@
 package com.hmf.server.controller;
 
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.hmf.server.entity.Brand;
 import com.hmf.server.entity.Company;
+import com.hmf.server.entity.User;
 import com.hmf.server.entity.VO.CompanyVo;
 import com.hmf.server.model.CompanySearchBody;
 import com.hmf.server.model.ResponseBean;
+import com.hmf.server.service.IBrandService;
 import com.hmf.server.service.ICompanyService;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.hmf.server.controller.BaseController;
@@ -28,9 +37,21 @@ public class CompanyController extends BaseController {
     @Autowired
     private ICompanyService iCompanyService;
 
+    @Autowired
+    private IBrandService brandService;
+
     @ApiModelProperty("获取企业信息")
     @GetMapping("/getAllCompanyInfo")
     public ResponseBean getAllCompanyInfo(){
+        Long companyId = (((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getCompanyId());
+        if (ObjectUtil.isNotEmpty(companyId)) {
+            Company company = iCompanyService.getById(companyId);
+            Brand brand = brandService.getById(company.getBrandId());
+            CompanyVo companyVo = new CompanyVo();
+            BeanUtils.copyProperties(company,companyVo);
+            companyVo.setBrand(brand);
+            return ResponseBean.success(CollectionUtil.toList(companyVo));
+        }
         List<CompanyVo> list = iCompanyService.getAllCompanyInfo();
         return ResponseBean.success(list);
     }

@@ -1,13 +1,18 @@
 package com.hmf.server.controller;
 
 
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hmf.server.entity.PartsStorage;
+import com.hmf.server.entity.User;
 import com.hmf.server.entity.VO.PartsStorageVO;
 import com.hmf.server.model.PartsStorageSearchBody;
 import com.hmf.server.model.ResponseBean;
 import com.hmf.server.service.IPartsStorageService;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,14 +45,36 @@ public class PartsStorageController extends BaseController {
     @ApiModelProperty("零部件库存信息组合查询")
     @PostMapping("/searchParts")
     public ResponseBean searchParts(@RequestBody PartsStorageSearchBody partsStorageSearchBody) {
-        if (partsStorageSearchBody == null) {
-            return ResponseBean.error("参数为空");
+        Long companyId = (((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getCompanyId());
+        if (companyId != null) {
+            return ResponseBean.success(partsStorageService.list(new LambdaQueryWrapper<PartsStorage>().eq(PartsStorage::getCompanyId, companyId)));
         } else {
-            System.out.println(partsStorageSearchBody);
-            List<PartsStorageVO> list = partsStorageService.searchParts(partsStorageSearchBody);
-            return ResponseBean.success(list);
+            if (partsStorageSearchBody == null) {
+                return ResponseBean.error("参数为空");
+            } else {
+                LambdaQueryWrapper<PartsStorage> wrapper = new LambdaQueryWrapper<>();
+                if(ObjectUtil.isNotEmpty(partsStorageSearchBody.getCompanyId())){
+                    wrapper.eq(PartsStorage::getCompanyId,partsStorageSearchBody.getCompanyId());
+                }
+                if(ObjectUtil.isNotEmpty(partsStorageSearchBody.getPartsNumber())){
+                    wrapper.like(PartsStorage::getPartsNumber,partsStorageSearchBody.getPartsNumber());
+                }
+                if(ObjectUtil.isNotEmpty(partsStorageSearchBody.getPartsName())){
+                    wrapper.like(PartsStorage::getPartsName,partsStorageSearchBody.getPartsName());
+                }
+                if(ObjectUtil.isNotEmpty(partsStorageSearchBody.getPartsFactoryName())){
+                    wrapper.like(PartsStorage::getFactoryName,partsStorageSearchBody.getPartsFactoryName());
+                }
+                if(ObjectUtil.isNotEmpty(partsStorageSearchBody.getCompanyName())){
+                    wrapper.like(PartsStorage::getCompanyName,partsStorageSearchBody.getCompanyName());
+                }
+                List<PartsStorage> list = partsStorageService.list(wrapper);
+//                List<PartsStorageVO> list = partsStorageService.searchParts(partsStorageSearchBody);
+                return ResponseBean.success(list);
+            }
         }
     }
+
 
     /*
      * 公司入库零部件编号去重
